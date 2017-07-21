@@ -7,7 +7,7 @@ from keras.layers import Conv2D, MaxPooling2D
 from keras import backend as K
 
 batch_size = 100
-epochs = 40
+epochs = 120
 num_classes = 10
 
 # input image dimensions
@@ -45,7 +45,9 @@ model.add(Conv2D(10, padding='same', kernel_size=(5,5), strides=(1,1), activatio
 model.add(MaxPooling2D(padding='valid', pool_size=(2,2), strides=(2,2)))
 model.add(Dropout(0.35))
 model.add(Flatten())
-model.add(Dense(40, activation='relu'))
+model.add(Dense(40, activation='sigmoid'))
+model.add(Dropout(0.5))
+model.add(Dense(10, activation='sigmoid'))
 model.add(Dropout(0.5))
 model.add(Dense(num_classes, activation='softmax'))
 model.compile(loss=keras.losses.categorical_crossentropy, optimizer=keras.optimizers.Adadelta(), metrics=['accuracy'])

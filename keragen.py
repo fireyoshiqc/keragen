@@ -272,8 +272,21 @@ def generate_layers(sexpr):
     if last_layer != "fc":
         layers+="""model.add(Flatten())
 """
-    layers+="""model.add(Dense(num_classes, activation='softmax'))
-""" #Only supports MNIST for now
+    softmax = ''
+    while softmax.upper()not in ['Y', 'N']:
+
+        softmax = input("Add a softmax layer for classification purposes?")
+        if softmax.upper() == 'N':
+            print("Training without softmax classification layer.")
+        elif softmax.upper() == 'Y':
+            layers+="""model.add(Dense(num_classes, activation='softmax'))
+"""
+            print("Training with softmax classification layer.")
+
+
+        
+
+#Only supports MNIST for now
 # TODO: Add functionality for other datasets.
     print("Done generating layers.")
     return layers
