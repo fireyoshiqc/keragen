@@ -14,9 +14,5 @@ nnet-codegen
   (fc (output 40 (fixed 2 8)) (weights (data @w2)) (simd 70)
       (neuron
         (bias (data @b2))
-        (relu)
-  (fc (output 10 (fixed 2 8)) (weights (data @w3)) (simd 10)
-      (neuron
-        (bias (data @b3))
-        (relu)     
+        (relu)))   
 )

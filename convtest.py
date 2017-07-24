@@ -2,6 +2,7 @@ from __future__ import print_function
 import keras
 from keras.datasets import mnist
 from keras.models import Sequential
+from keras.models import Model
 from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Conv2D, MaxPooling2D
 from keras import backend as K
@@ -45,9 +46,7 @@ model.add(Conv2D(10, padding='same', kernel_size=(5,5), strides=(1,1), activatio
 model.add(MaxPooling2D(padding='valid', pool_size=(2,2), strides=(2,2)))
 model.add(Dropout(0.35))
 model.add(Flatten())
-model.add(Dense(40, activation='sigmoid'))
-model.add(Dropout(0.5))
-model.add(Dense(10, activation='sigmoid'))
+model.add(Dense(40, activation='relu'))
 model.add(Dropout(0.5))
 model.add(Dense(num_classes, activation='softmax'))
 model.compile(loss=keras.losses.categorical_crossentropy, optimizer=keras.optimizers.Adadelta(), metrics=['accuracy'])
@@ -58,8 +57,31 @@ score = model.evaluate(x_test, y_test, verbose=0)
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
 
+intermediate_layer_model = Model(inputs=model.input,
+                                 outputs=model.get_layer(index=7).output)
+intermediate_output = intermediate_layer_model.predict(x_test)
+print(intermediate_output)
+
+saver = open('convtest_stats1.txt', 'w+')
+saver.write("Max: " + str(max(intermediate_output.flatten().tolist()))+ "\n")
+saver.write("Min:" + str(min(intermediate_output.flatten().tolist()))+ "\n")
+saver.close()
+
+intermediate_layer_model2 = Model(inputs=model.input,
+                                 outputs=model.get_layer(index=9).output)
+intermediate_output2 = intermediate_layer_model2.predict(x_test)
+print(intermediate_output2)
+
+saver = open('convtest_stats2.txt', 'w+')
+saver.write("Max: " + str(max(intermediate_output2.flatten().tolist()))+ "\n")
+saver.write("Min:" + str(min(intermediate_output2.flatten().tolist()))+ "\n")
+saver.close()
+
 counter = 0
+i = 0
 for layer in model.layers:
+    print("Processing layer", i)
+    i += 1
     if layer.get_weights():
         saver = open('convtest_w'+str(counter)+'.nn', 'w+')
         saver.write(" ".join(map(str,layer.get_weights()[0].flatten().tolist())))
