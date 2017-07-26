@@ -222,7 +222,7 @@ signal done_s2 : std_logic;
 signal start_s3 : std_logic;
 signal ack_s4 : std_logic;
 signal load_done_s5 : std_logic;
-signal din_s6 : std_logic_vector(8 downto 0);
+signal din_s6 : std_logic_vector(7 downto 0);
 signal dout_s7 : std_logic_vector(79 downto 0);
 signal addr_s8 : std_logic_vector(9 downto 0);
 signal out_addr_s9 : std_logic_vector(9 downto 0);
@@ -233,8 +233,8 @@ signal wren_s11 : std_logic_vector(9 downto 0);
 signal ready_s98 : std_logic;
 signal done_s99 : std_logic;
 signal start_s100 : std_logic;
-signal din_s101 : std_logic_vector(8 downto 0);
-signal dout_s102 : std_logic_vector(8 downto 0);
+signal din_s101 : std_logic_vector(7 downto 0);
+signal dout_s102 : std_logic_vector(7 downto 0);
 signal wr_addr_s103 : std_logic_vector(9 downto 0);
 signal rd_addr_s104 : std_logic_vector(9 downto 0);
 signal row_s105 : std_logic_vector(4 downto 0);
@@ -399,7 +399,7 @@ conv_layer_mc_u0 : conv_layer_mc generic map(
     dsp_alloc => 1,
     weight_file => "convtest_w0.txt",
     bias_file => "convtest_b0.txt",
-    input_int_part => 1,
+    input_int_part => 0,
     input_frac_part => 8,
     weight_int_part => 1,
     weight_frac_part => 8,
@@ -424,7 +424,7 @@ conv_layer_mc_u0 : conv_layer_mc generic map(
 bram_pad_interlayer_u97 : bram_pad_interlayer generic map(
     init_file => "~/felix/Git/keragen/convtest_gen/imagedata_7.txt",
     channels => 1,
-    channel_width => 9,
+    channel_width => 8,
     zero_padding => 1,
     layer_size => 28
 ) port map(
