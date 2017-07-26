@@ -358,7 +358,7 @@ signal ack_s76 : std_logic;
 signal in_a_s77 : std_logic_vector(439 downto 0);
 signal out_a_s78 : std_logic_vector(119 downto 0);
 signal out_offset_s79 : unsigned(3 downto 0);
-signal simd_offset_s80 : std_logic_vector(0 downto 0);
+signal simd_offset_s80 : std_logic_vector(1 downto 0);
 signal op_argument_s81 : sfixed(12 downto -14);
 signal op_result_s82 : sfixed(3 downto -8);
 signal op_send_s83 : std_logic;
