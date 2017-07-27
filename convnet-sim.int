@@ -1,4 +1,5 @@
 int-codegen
 (import d "imagedata.nn")
-(interface sim (data @d))
+(interface block)
+"(interface sim (data @d))"
 "(file ~/felix/Git/keragen/convtest_gen/imagedata_7.txt)"
