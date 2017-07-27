@@ -86,18 +86,6 @@ port(
 );
 end component;
 
-component relu_op is
-generic(
-    spec : fixed_spec
-);
-port(
-    input : in sfixed;
-    output : out sfixed;
-    op_send : out std_logic;
-    op_receive : in std_logic
-);
-end component;
-
 component sigmoid_op is
 generic(
     input_spec : fixed_spec;
@@ -145,8 +133,9 @@ signal output_s16 : sfixed(13 downto -15);
 signal op_send_s17 : std_logic;
 signal op_receive_s18 : std_logic;
 
+
 signal input_s20 : sfixed(13 downto -15);
-signal output_s21 : sfixed(13 downto -15);
+signal output_s21 : sfixed(2 downto -8);
 signal op_send_s22 : std_logic;
 signal op_receive_s23 : std_logic;
 
@@ -252,9 +241,13 @@ bias_op_u13 : bias_op generic map(
     op_send => op_send_s17,
     op_receive => op_receive_s18
 );
-relu_op_u19 : relu_op generic map(
-    spec => fixed_spec(fixed_spec'(int => 14, frac => 15))
+sigmoid_op_u19 : sigmoid_op generic map(
+    input_spec => fixed_spec(fixed_spec'(int => 14, frac => 15)),
+    output_spec => fixed_spec(fixed_spec'(int => 3, frac => 8)),
+    step_precision => 2,
+    bit_precision => 16
 ) port map(
+    clk => clk,
     input => input_s20,
     output => output_s21,
     op_send => op_send_s22,
