@@ -10,6 +10,8 @@ class Example(QMainWindow):
     pythonfilelabel = None
     nnstatuslabel = None
     sexpr = None
+    inputfield = None
+    layersfield = None
     
     def __init__(self):
         super().__init__()
@@ -30,6 +32,15 @@ class Example(QMainWindow):
         self.pythonfilelabel.setReadOnly(True)
 
         self.nnstatuslabel=QLabel()
+        self.nnstatuslabel.setText("Please select an NN file for parsing.")
+
+        inputlabel = QLabel("Input format: ")
+        self.inputfield = QLineEdit()
+        self.inputfield.setReadOnly(True)
+
+        layerslabel = QLabel("Network layers: ")
+        self.layersfield = QTextEdit()
+        self.layersfield.setReadOnly(True)
         
 
         qbtn = QPushButton('Browse', self)
@@ -49,9 +60,16 @@ class Example(QMainWindow):
 
         grid.addWidget(self.nnstatuslabel, 2, 1)
 
-        grid.addWidget(pylabel, 3, 0)
-        grid.addWidget(self.pythonfilelabel, 3, 1)
-        grid.addWidget(qbtn2, 3, 2)
+        grid.addWidget(inputlabel, 3, 0)
+        grid.addWidget(self.inputfield, 3, 1)
+
+        grid.addWidget(layerslabel, 4, 0)
+        grid.addWidget(self.layersfield, 4, 1)
+
+
+        grid.addWidget(pylabel, 5, 0)
+        grid.addWidget(self.pythonfilelabel, 5, 1)
+        grid.addWidget(qbtn2, 5, 2)
 
 
         w.setLayout(grid)
@@ -79,10 +97,16 @@ class Example(QMainWindow):
             self.nnstatuslabel.setText("Validating...")
             self.sexpr.validate(True)
             self.nnstatuslabel.setText("Valid!")
+            self.displayLayers()
         except (RuntimeError, RuntimeWarning) as e:
             self.nnstatuslabel.setText("Error in NN file: {0}".format(e))
+            self.sexprfield.setText("Parsed NN file is invalid.")
         
-
+    def displayLayers(self):
+        self.inputfield.setText(str(self.sexpr.search_children_of("input")))
+        for layer in self.sexpr.search_all(["fc", "conv2d", "pool"]):
+            self.layersfield.setText(self.layersfield.toPlainText()
+            + str(layer.root)+" -> Output: "+layer.search_children_of("output")+ ", SIMD: " +layer.search_children_of("simd")+"\n")
 
     def saveFileDialog(self):    
         options = QFileDialog.Options()

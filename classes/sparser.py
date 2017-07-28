@@ -33,6 +33,18 @@ class SNode:
                 if sexpr is not None:
                     return sexpr
 
+    def search_children_of(self, root):
+        sexpr = None
+        if str(self.root) == root:
+            return str(self.children)
+        else:
+            if not self.children:
+                return None
+            for child in self.children:
+                sexpr = child.search_children_of(root)
+                if sexpr is not None:
+                    return sexpr
+
     def search_all(self, roots): # This works for layers that are present multiple times, such as 'fc'.
         sexprs = []
         if str(self.root) in roots:
