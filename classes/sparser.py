@@ -77,7 +77,7 @@ class SNode:
                     if float(datum.root) != float(datum.root): #Check if NaN!=NaN, as defined
                         raise RuntimeError("Found non-number in S-Expression starting with 'data'.")
                 except ValueError:
-                    print("ERROR: Found non-number in S-Expression starting with 'data':", datum.root)
+                    raise RuntimeError("Found non-number in S-Expression starting with 'data': " + str(datum.root))
                     exit()
         elif str(self.root)=="network":
             for child in self.children:
@@ -87,14 +87,12 @@ class SNode:
                 #if int(str(self.children[0].root))>0:# and str(self.children[1].root)=="fixed":
                     #self.children[1].validate()
                 if int(str(self.children[0].root))<=0:
-                    print("ERROR: Negative or zero number of inputs/outputs found.")
-                    exit()
+                    raise RuntimeError("Negative or zero number of inputs/outputs found.")
                 #else:
                     #print("ERROR: Unknown data representation used. Expected 'fixed', got '"+str(self.children[1].root)+"'.")
                     #exit()
             except ValueError:
-                print("ERROR: Found non-integer as number of inputs/outputs:", str(self.children[0].root))
-                exit()
+                raise RuntimeError("Found non-integer as number of inputs/outputs: " + str(self.children[0].root))
 
         elif str(self.root)=="fc":
             output_defined = False
@@ -111,11 +109,9 @@ class SNode:
                     
                 index += 1
             if (not output_defined):
-                print("ERROR: No suitable output S-Expression found in 'fc' clause.")
-                exit()
+                raise RuntimeError("No suitable output S-Expression found in 'fc' clause.")
             if (not neuron_defined):
-                print("ERROR: No suitable neuron S-Expression found in 'fc' clause.")
-                exit()
+                raise RuntimeError("No suitable neuron S-Expression found in 'fc' clause.")
 
         elif str(self.root)=="conv2d":
             output_defined = False
@@ -147,20 +143,15 @@ class SNode:
                     
                 index += 1
             if (not output_defined):
-                print("ERROR: No suitable output S-Expression found in 'conv2d' clause.")
-                exit()
+                raise RuntimeError("No suitable output S-Expression found in 'conv2d' clause.")
             if (not neuron_defined):
-                print("ERROR: No suitable neuron S-Expression found in 'conv2d' clause.")
-                exit()
+                raise RuntimeError("No suitable neuron S-Expression found in 'conv2d' clause.")
             if (not kernel_defined):
-                print("ERROR: No suitable kernel S-Expression found in 'conv2d' clause.")
-                exit()
+                raise RuntimeError("No suitable kernel S-Expression found in 'conv2d' clause.")
             if (not stride_defined):
-                print("ERROR: No suitable stride S-Expression found in 'conv2d' clause.")
-                exit()
+                raise RuntimeError("No suitable stride S-Expression found in 'conv2d' clause.")
             if (not padding_defined):
-                print("ERROR: No suitable padding S-Expression found in 'conv2d' clause.")
-                exit()
+                raise RuntimeError("No suitable padding S-Expression found in 'conv2d' clause.")
         
         elif str(self.root)=="pool":
             type_defined = False
@@ -182,14 +173,11 @@ class SNode:
                     
                 index += 1
             if (not type_defined):
-                print("ERROR: No suitable pooling type S-Expression found in 'pool' clause.\nSupported types include : 'max'")
-                exit()
+                raise RuntimeError("No suitable pooling type S-Expression found in 'pool' clause.\nSupported types include : 'max'")
             if (not stride_defined):
-                print("ERROR: No suitable stride S-Expression found in 'pool' clause.")
-                exit()
+                raise RuntimeError("No suitable stride S-Expression found in 'pool' clause.")
             if (not padding_defined):
-                print("ERROR: No suitable padding S-Expression found in 'pool' clause.")
-                exit()
+                raise RuntimeError("No suitable padding S-Expression found in 'pool' clause.")
 
         elif str(self.root)=="neuron":
             activation_defined = False
@@ -200,22 +188,18 @@ class SNode:
                     break
                 index += 1
             if (not activation_defined):
-                print("ERROR: No suitable activation function S-Expression found in 'neuron' clause.\nSupported activation functions include: 'sigmoid', 'relu'")
-                exit()
+                raise RuntimeError("No suitable activation function S-Expression found in 'neuron' clause.\nSupported activation functions include: 'sigmoid', 'relu'")
 
         elif str(self.root) in ["kernel", "max", "stride"]:
             try:
                 if int(str(self.children[0].root))<=0:
-                    print("ERROR: Kernel, max and stride dimensions must be positive integers.")
-                    exit()
+                    raise RuntimeError("Kernel, max and stride dimensions must be positive integers.")
             except ValueError:
-                print("ERROR: Found non-integer as kernel, max or stride dimension:", str(self.children[0].root))
-                exit()
+                raise RuntimeError("Found non-integer as kernel, max or stride dimension: " + str(self.children[0].root))
         
         elif str(self.root) == "padding":
             if str(self.children[0].root) not in ["same", "valid"]:
-                    print("ERROR: Unknown padding value encountered. Expected 'same' or 'valid', got '"+ str(self.children[0].root)+"'.")
-                    exit()
+                    raise RuntimeError("Unknown padding value encountered. Expected 'same' or 'valid', got "+ str(self.children[0].root))
         elif verbose:
             print("Network S-Expression is valid.")
 
